@@ -1,3 +1,4 @@
+import sqlite3
 def saudacao(nome: str) -> str:
     """
     Retorna uma saudação personalizada.
