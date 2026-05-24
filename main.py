@@ -63,6 +63,24 @@ def validar_email(email: str) -> bool:
     return len(usuario) > 0 and len(dominio) > 0 and '.' in dominio
 
 
+def buscar_usuario_seguro(user_id: int):
+    """
+    Busca um usuário por `id` no banco SQLite usando consulta parametrizada.
+
+    Retorna uma tupla com os dados do usuário ou `None` se não encontrado
+    ou em caso de erro de acesso ao banco.
+    """
+    if user_id is None:
+        return None
+    try:
+        with sqlite3.connect('banco.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+            return cursor.fetchone()
+    except sqlite3.Error:
+        return None
+
+
 def main():
     """Função principal da aplicação."""
     print("=" * 50)
@@ -91,11 +109,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-def buscar_usuario_seguro(user_id):
-    conn = sqlite3.connect('banco.db')
-    cursor = conn.cursor()
-    # ✅ Query parametrizada — sem risco de SQL Injection
-    cursor.execute("SELECT * FROM users WHERE id=?", (user_id,))
-    return cursor.fetchone()
