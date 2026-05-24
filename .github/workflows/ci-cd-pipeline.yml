@@ -44,6 +44,9 @@ jobs:
   codeql-analysis:
     name: 🔒 Análise de Segurança (CodeQL)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     
     steps:
       # PASSO 1: Baixa o código do repositório
@@ -149,6 +152,8 @@ jobs:
     runs-on: ubuntu-latest
     # IMPORTANTE: Este job só executa se o CodeQL passar
     needs: codeql-analysis
+    permissions:
+      contents: read
     
     steps:
       # PASSO 1: Baixa o código
@@ -200,6 +205,8 @@ jobs:
     environment:
       name: stage
       url: https://stage.exemplo.com
+    permissions:
+      contents: read
     
     steps:
       # PASSO 1: Baixa o código

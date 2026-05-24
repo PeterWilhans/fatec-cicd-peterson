@@ -48,45 +48,26 @@ Resultado: Pipeline executada com sucesso, nenhum alerta de segurança encontrad
 📷 Evidência:
 <img width="1080" height="274" alt="image" src="https://github.com/user-attachments/assets/21690c8f-1bed-4923-828b-2856be04ef23" />
 
-❌ Teste 2 — Código Vulnerável
-Inserção proposital de vulnerabilidade SQL Injection (CWE-89)
+🔒 Teste 2 — Exemplos e boas práticas
 
-Exemplo de código vulnerável:
+Para evitar falsos positivos e exemplificar boas práticas, o repositório não contém exemplos ativos de código vulnerável. Em vez disso, apresentamos abaixo a forma segura recomendada para consultas SQL em SQLite.
 
-python
-import sqlite3
+Exemplo de código seguro (uso de consultas parametrizadas):
 
-def buscar_usuario_vulneravel(username):
-    # ❌ VULNERÁVEL: concatenação direta do input do usuário
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-
-    query = f"SELECT * FROM usuarios WHERE username = '{username}'"
-    cursor.execute(query)
-    return cursor.fetchall()
-Problema: Permite injeção de comandos SQL maliciosos.
-Resultado: Pipeline falhou, CodeQL identificou a vulnerabilidade.
-
-📷 Evidência:
-<img width="1073" height="269" alt="image" src="https://github.com/user-attachments/assets/d2caa7dc-4355-48a1-9688-042865865a36" />
-
-🔒 Teste 3 — Código Corrigido
-Correção aplicada com consultas parametrizadas
-
-Exemplo de código seguro:
-
-python
+```python
 import sqlite3
 
 def buscar_usuario_seguro(username):
-    # ✅ SEGURO: uso de parâmetros preparados
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
+       # ✅ SEGURO: uso de parâmetros preparados
+       conn = sqlite3.connect('database.db')
+       cursor = conn.cursor()
 
-    query = "SELECT * FROM usuarios WHERE username = ?"
-    cursor.execute(query, (username,))
-    return cursor.fetchall()
-Resultado: Pipeline executada com sucesso, nenhuma vulnerabilidade detectada.
+       query = "SELECT * FROM usuarios WHERE username = ?"
+       cursor.execute(query, (username,))
+       return cursor.fetchall()
+```
+
+Problema evitado: Injeção de SQL (CWE-89) — sempre use parâmetros ao inserir valores do usuário em consultas.
 
 📷 Evidência:
 <img width="1070" height="291" alt="image" src="https://github.com/user-attachments/assets/fe36d07a-b48a-4369-8bb5-9efad3931c7f" />
