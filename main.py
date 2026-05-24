@@ -1,14 +1,16 @@
 import sqlite3
 from flask import Flask, request
 
-app = Flask(_name_)
+app = Flask(__name__)
 
+# ❌ VULNERÁVEL: SQL Injection via Flask route
 @app.route('/user/<username>')
 def buscar_usuario_vulneravel(username):
     """SQL Injection vulnerability - user input directly in query"""
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     
+    # VULNERABILITY.: f-string with untrusted input
     query = f"SELECT * FROM usuarios WHERE username = '{username}'"
     cursor.execute(query)
     
@@ -16,6 +18,7 @@ def buscar_usuario_vulneravel(username):
     conn.close()
     return str(results)
 
+# ❌ VULNERÁVEL: SQL Injection via query parameter
 @app.route('/delete')
 def deletar_usuario_vulneravel():
     """SQL Injection via query parameter"""
@@ -23,12 +26,14 @@ def deletar_usuario_vulneravel():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     
+    # VULNERABILITY: string concatenation with user input
     query = "DELETE FROM usuarios WHERE id = " + user_id
     cursor.execute(query)
     conn.commit()
     conn.close()
     return "Deleted"
 
+# ❌ VULNERÁVEL: SQL Injection via POST data
 @app.route('/update', methods=['POST'])
 def atualizar_email_vulneravel():
     """SQL Injection via POST body"""
@@ -37,12 +42,14 @@ def atualizar_email_vulneravel():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     
+    # VULNERABILITY: % formatting with user input
     query = "UPDATE usuarios SET email = '%s' WHERE id = %s" % (email, user_id)
     cursor.execute(query)
     conn.commit()
     conn.close()
     return "Updated"
 
+# ❌ VULNERÁVEL: SQL Injection via JSON
 @app.route('/search', methods=['POST'])
 def buscar_por_email():
     """SQL Injection via JSON body"""
@@ -51,6 +58,7 @@ def buscar_por_email():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     
+    # VULNERABILITY: .format() with user input
     query = "SELECT * FROM usuarios WHERE email = '{}'".format(email)
     cursor.execute(query)
     
@@ -58,5 +66,5 @@ def buscar_por_email():
     conn.close()
     return str(results)
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
