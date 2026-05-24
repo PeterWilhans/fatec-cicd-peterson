@@ -1,2 +1,2 @@
-# fatec-cicd-peterson
-About Pipeline CI/CD com CodeQL - Projeto FATEC
+# projeto_pipeline_fatec
+Projeto para trabalho na fatec
