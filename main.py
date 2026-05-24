@@ -1,31 +1,62 @@
-# main.py
 import sqlite3
+from flask import Flask, request
 
+app = Flask(_name_)
 
-def saudacao(nome: str) -> str:
-    """Retorna uma saudação segura."""
-    if not isinstance(nome, str):
-        raise TypeError("Nome deve ser uma string")
-    return f"Olá, {nome}! Bem-vindo ao sistema."
-
-
-def calcular_media(notas: list) -> float:
-    """Calcula a média de uma lista de notas."""
-    if not notas:
-        raise ValueError("Lista de notas não pode ser vazia")
-    return sum(notas) / len(notas)
-
-
-if __name__ == "__main__":
-    print(saudacao("Aluno FATEC"))
-    print(f'Média: {calcular_media([8.5, 9.0, 7.5])}')
-
-# Adicione ao final do main.py (temporariamente)
-
-
-def buscar_usuario_vulneravel(user_id):
-    conn = sqlite3.connect('banco.db')
+@app.route('/user/<username>')
+def buscar_usuario_vulneravel(username):
+    """SQL Injection vulnerability - user input directly in query"""
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    # ⚠️ SQL INJECTION: nunca faça isso em produção!
-    cursor.execute(f"SELECT * FROM users WHERE id={user_id}")
-    return cursor.fetchone()
+    
+    query = f"SELECT * FROM usuarios WHERE username = '{username}'"
+    cursor.execute(query)
+    
+    results = cursor.fetchall()
+    conn.close()
+    return str(results)
+
+@app.route('/delete')
+def deletar_usuario_vulneravel():
+    """SQL Injection via query parameter"""
+    user_id = request.args.get('id')
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    
+    query = "DELETE FROM usuarios WHERE id = " + user_id
+    cursor.execute(query)
+    conn.commit()
+    conn.close()
+    return "Deleted"
+
+@app.route('/update', methods=['POST'])
+def atualizar_email_vulneravel():
+    """SQL Injection via POST body"""
+    email = request.form.get('email')
+    user_id = request.form.get('id')
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    
+    query = "UPDATE usuarios SET email = '%s' WHERE id = %s" % (email, user_id)
+    cursor.execute(query)
+    conn.commit()
+    conn.close()
+    return "Updated"
+
+@app.route('/search', methods=['POST'])
+def buscar_por_email():
+    """SQL Injection via JSON body"""
+    data = request.get_json()
+    email = data.get('email')
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    
+    query = "SELECT * FROM usuarios WHERE email = '{}'".format(email)
+    cursor.execute(query)
+    
+    results = cursor.fetchall()
+    conn.close()
+    return str(results)
+
+if _name_ == '_main_':
+    app.run(debug=True)
