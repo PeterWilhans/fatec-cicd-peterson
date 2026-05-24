@@ -25,10 +25,6 @@ else:
 
 from main import saudacao, calcular_media 
 
- 
-
- 
-
 class TestSaudacao: 
 
     def test_saudacao_nome_valido(self): 
@@ -45,18 +41,11 @@ class TestSaudacao:
 
             saudacao(123) 
 
- 
-
- 
-
 class TestCalcularMedia: 
 
     def test_media_simples(self): 
 
         assert calcular_media([10, 8, 6]) == 8.0 
-
- 
-
     def test_lista_vazia(self): 
 
         with pytest.raises(ValueError): 
