@@ -1,4 +1,4 @@
-""""
+"""
 Testes Unitários - Exemplo FATEC
 =================================
 Arquivo de exemplo para demonstrar testes automatizados
