@@ -2,13 +2,12 @@
 
 import sys
 from pathlib import Path
-
 import pytest
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from main import calcular_media, saudacao  # noqa: E402
+from main import saudacao, calcular_media  # noqa: E402
 
 
 class TestSaudacao:
