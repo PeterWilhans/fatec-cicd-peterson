@@ -65,6 +65,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       # PASSO 4: Inicializa o CodeQL para análise de segurança
       - name: 🔧 Inicializar CodeQL
         uses: github/codeql-action/init@v3
@@ -137,6 +138,7 @@ jobs:
         run: |
           echo "✅ Código aprovado na análise de segurança!"
           echo "🎉 Todas as verificações de segurança passaram!"
+
   # ---------------------------------------------------------------------------
   # JOB 2: TESTES AUTOMATIZADOS
   # ---------------------------------------------------------------------------
@@ -166,6 +168,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest pytest-cov
+
       # PASSO 4: Executa os testes com cobertura
       - name: 🧪 Executar testes
         run: |
@@ -173,6 +176,7 @@ jobs:
           # Exemplo: pytest tests/ --cov=. --cov-report=term
           python -m pytest --version || echo "⚠️ Adicione testes ao projeto!"
           echo "✅ Testes concluídos!"
+
       # PASSO 5: Valida sintaxe e estilo do código
       - name: 🎨 Validar qualidade do código
         run: |
@@ -180,6 +184,7 @@ jobs:
           echo "🔍 Verificando qualidade do código..."
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           echo "✅ Código validado!"
+
   # ---------------------------------------------------------------------------
   # JOB 3: DEPLOY PARA STAGE
   # ---------------------------------------------------------------------------
@@ -213,6 +218,7 @@ jobs:
           echo "📦 Criando pacote para deploy..."
           pip install -r requirements.txt
           echo "✅ Artefatos preparados!"
+
       # PASSO 4: Simula deploy (substitua com seu processo real)
       - name: 🚀 Deploy para Stage
         run: |
@@ -235,6 +241,7 @@ jobs:
           echo "🧪 Testes: Todos passaram"
           echo "🚀 Deploy: Realizado em Stage"
           echo "============================================"
+
       # PASSO 6: Notifica falha
       - name: ❌ Notificar falha
         if: failure()
