@@ -1,16 +1,3 @@
-"""
-Aplicação Python de Exemplo - FATEC
-====================================
-Este é um exemplo didático de aplicação Python para demonstrar
-a pipeline CI/CD com análise de segurança CodeQL.
-
-Autor: Professor FATEC
-Disciplina: Desenvolvimento de Sistemas
-"""
-
-import sqlite3
-
-
 def saudacao(nome: str) -> str:
     """
     Retorna uma saudação personalizada.
