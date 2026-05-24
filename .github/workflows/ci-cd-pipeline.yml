@@ -192,4 +192,4 @@ jobs:
 
           echo 'Branch: ${{ github.ref_name }}' 
 
-          echo '🚀 Aplicação disponível em stage!'
+          echo '🚀 Aplicação disponível em stage!' 
